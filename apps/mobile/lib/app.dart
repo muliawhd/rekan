@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'core/theme/app_theme.dart';
 import 'features/foundation/presentation/foundation_page.dart';
@@ -11,7 +11,7 @@ class ReApp extends StatelessWidget {
     return MaterialApp(
       title: 'Re',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
+      theme: AppTheme.light as dynamic,
       home: const FoundationPage(),
     );
   }
