@@ -1,0 +1,21 @@
+# Phase 1 checklist
+
+- [x] Read all requested architecture kit files and inspect the existing project.
+- [x] Record differences before implementation; preserve original kit and Android sources.
+- [x] Initialize Git and monorepo destination directories.
+- [x] Configure PostgreSQL/Redis Compose with local-only ports, persistent volumes and health checks.
+- [x] Add environment templates; generate ignored local database credentials.
+- [x] Add setup/development/check scripts and documentation.
+- [x] Prepare minimal health controller, versioned route and alias, and HTTP feature tests as overlays.
+- [x] Prepare Flutter shell, theme, public config and widget test as overlays.
+- [x] Validate PowerShell syntax and Compose configuration.
+- [ ] Generate Flutter under apps/mobile with the installed stable SDK (missing).
+- [ ] Generate Laravel under services/api with PHP and Composer (missing).
+- [ ] Install and lock dependencies; apply overlays and run formatters.
+- [ ] Run Flutter doctor, analyze, test and Android debug build/emulator smoke.
+- [ ] Run Laravel route list, feature tests and Pint.
+- [ ] Start Docker services and verify their health (engine stopped).
+- [ ] Start Laravel and verify both HTTP liveness routes.
+- [ ] Pin SDK and configure CI using actual generated projects and lockfiles.
+- [ ] Review and commit the validated foundation checkpoint.
+- [ ] Mark Phase 1 validated before proceeding to identity.
