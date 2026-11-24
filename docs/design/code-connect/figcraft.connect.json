@@ -1,0 +1,152 @@
+{
+  "links": [
+    {
+      "component": "Action / Lewati",
+      "importPath": "package:re_mobile/features/discover/widgets/re_discover_action_bar.dart",
+      "language": "flutter",
+      "name": "ReDiscoverActionBar",
+      "template": "ReDiscoverActionBar()"
+    },
+    {
+      "component": "ReBottomNavigation / Active=Jelajah",
+      "importPath": "package:re_mobile/core/widgets/re_bottom_navigation.dart",
+      "language": "flutter",
+      "name": "ReBottomNavigation",
+      "template": "ReBottomNavigation()"
+    },
+    {
+      "component": "ReBrandMark",
+      "importPath": "package:re_mobile/core/widgets/re_brand_mark.dart",
+      "language": "flutter",
+      "name": "ReBrandMark",
+      "template": "ReBrandMark()"
+    },
+    {
+      "component": "ReChip / Skill Python",
+      "importPath": "package:re_mobile/core/widgets/re_chip.dart",
+      "language": "flutter",
+      "name": "ReChip",
+      "template": "ReChip()"
+    },
+    {
+      "component": "ReConversationTile - Nadiya R. (Unread)",
+      "importPath": "package:re_mobile/features/chat/widgets/re_conversation_tile.dart",
+      "language": "flutter",
+      "name": "ReConversationTile",
+      "template": "ReConversationTile()"
+    },
+    {
+      "component": "ReEmptyState / Discover Deck Empty",
+      "importPath": "package:re_mobile/core/widgets/re_empty_state.dart",
+      "language": "flutter",
+      "name": "ReEmptyState",
+      "template": "ReEmptyState()"
+    },
+    {
+      "component": "ReInfoRow - GitHub",
+      "importPath": "package:re_mobile/features/academic_profile/presentation/re_info_row.dart",
+      "language": "flutter",
+      "name": "ReInfoRow",
+      "template": "ReInfoRow()"
+    },
+    {
+      "component": "ReMessageBubble (Other + Attachment)",
+      "importPath": "package:re_mobile/features/rooms/widgets/re_message_bubble.dart",
+      "language": "flutter",
+      "name": "ReMessageBubble",
+      "template": "ReMessageBubble()"
+    },
+    {
+      "component": "RePinnedPurpose - Tujuan Room Card",
+      "importPath": "package:re_mobile/features/rooms/widgets/re_pinned_purpose.dart",
+      "language": "flutter",
+      "name": "RePinnedPurpose",
+      "template": "RePinnedPurpose()"
+    },
+    {
+      "component": "RePrimaryButton / Default",
+      "importPath": "package:re_mobile/core/widgets/re_form_components.dart",
+      "language": "flutter",
+      "name": "RePrimaryAction",
+      "template": "RePrimaryButton()"
+    },
+    {
+      "component": "ReProfileCard (Active Candidate - Nadiya R.)",
+      "importPath": "package:re_mobile/features/discover/widgets/re_profile_card.dart",
+      "language": "flutter",
+      "name": "ReProfileCard",
+      "template": "ReProfileCard()"
+    },
+    {
+      "component": "ReRoomHeader - Tim Lomba Data 2025",
+      "importPath": "package:re_mobile/features/rooms/widgets/re_room_header.dart",
+      "language": "flutter",
+      "name": "ReRoomHeader",
+      "template": "ReRoomHeader()"
+    },
+    {
+      "component": "ReSearchAndFilterBar",
+      "importPath": "package:re_mobile/core/widgets/re_search_and_filter_bar.dart",
+      "language": "flutter",
+      "name": "ReSearchAndFilterBar",
+      "template": "ReSearchAndFilterBar()"
+    },
+    {
+      "component": "ReSecondaryButton / Default",
+      "importPath": "package:re_mobile/core/widgets/re_secondary_button.dart",
+      "language": "flutter",
+      "name": "ReSecondaryButton",
+      "template": "ReSecondaryButton()"
+    },
+    {
+      "component": "ReSectionHeader / Keahlian & Mata Kuliah",
+      "importPath": "package:re_mobile/core/widgets/re_section_header.dart",
+      "language": "flutter",
+      "name": "ReSectionHeader",
+      "template": "ReSectionHeader()"
+    },
+    {
+      "component": "ReSegmentedTabs / Inbox Filter",
+      "importPath": "package:re_mobile/core/widgets/re_segmented_tabs.dart",
+      "language": "flutter",
+      "name": "ReSegmentedTabs",
+      "template": "ReSegmentedTabs()"
+    },
+    {
+      "component": "ReStatusBanner / Info",
+      "importPath": "package:re_mobile/core/widgets/re_form_components.dart",
+      "language": "flutter",
+      "name": "ReStatusNotice",
+      "template": "ReStatusBanner()"
+    },
+    {
+      "component": "ReSwipeStamp / Lewati (Left Drag)",
+      "importPath": "package:re_mobile/features/discover/widgets/re_swipe_stamp.dart",
+      "language": "flutter",
+      "name": "ReSwipeStamp",
+      "template": "ReSwipeStamp()"
+    },
+    {
+      "component": "ReTextField / Default",
+      "importPath": "package:re_mobile/core/widgets/re_text_field.dart",
+      "language": "flutter",
+      "name": "ReTextField",
+      "template": "ReTextField()"
+    },
+    {
+      "component": "ReTopAppBar / Room Header",
+      "importPath": "package:re_mobile/core/widgets/re_top_app_bar.dart",
+      "language": "flutter",
+      "name": "ReTopAppBar",
+      "template": "ReTopAppBar()"
+    },
+    {
+      "component": "ReUnreadBadge / 1",
+      "importPath": "package:re_mobile/core/widgets/re_unread_badge.dart",
+      "language": "flutter",
+      "name": "ReUnreadBadge",
+      "template": "ReUnreadBadge()"
+    }
+  ],
+  "version": 1
+}

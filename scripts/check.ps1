@@ -1,6 +1,13 @@
-param([Parameter(Mandatory)][ValidateSet('mobile', 'api', 'infra')][string] $Target)
+param([Parameter(Mandatory)][ValidateSet('mobile', 'api', 'infra', 'connections')][string] $Target)
 . "$PSScriptRoot/common.ps1"
 switch ($Target) {
+    'connections' {
+        Require-Tool php
+        Push-Location (Join-Path $RepoRoot 'services/api')
+        try {
+            Invoke-Native php @('artisan', 'foundation:check')
+        } finally { Pop-Location }
+    }
     'mobile' {
         Require-Tool flutter
         Require-Tool dart

@@ -1,6 +1,8 @@
 # Infrastructure & deployment design
 
 ## Environments
+
+Phase 2A override: [approved decisions](phase-2a-decisions.md) require Supabase Cloud Auth with local Docker PostgreSQL for all domain data and local Redis. Do not migrate domain data to Supabase Cloud. Hosted database and pooler guidance below is historical kit guidance, not an approved deployment instruction.
 - `local`: Flutter emulator + Laravel app + Docker local Postgres & Redis; Supabase cloud Auth/Realtime testing requires dedicated dev Supabase project. Never treat local Postgres as same as hosted Supabase project.
 - `staging`: dedicated Supabase project, Firebase config, hosted Laravel API+worker, private Storage, test users and seeded data.
 - `production`: separate Supabase and Firebase projects, secrets, domain/API TLS, managed Redis, monitored Laravel app and worker, backups and alerts.

@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,5 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // Authentication and authorization are introduced in the identity phase.
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Only the public liveness endpoint is exposed in this phase.
+        $exceptions->render(function (AccessDeniedHttpException $exception, Request $request) {
+            if ($request->attributes->has('request_id')) {
+                return response()->json([
+                    'error' => ['code' => 'FORBIDDEN', 'message' => 'Access denied.', 'details' => (object) []],
+                    'request_id' => $request->attributes->get('request_id'),
+                ], 403);
+            }
+        });
     })->create();

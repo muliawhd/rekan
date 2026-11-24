@@ -1,8 +1,19 @@
 # Re — fullstack foundation
 
+Latest checkpoint (2026-11-15): [Phase 2D academic profile API](docs/architecture/phase-2d-status.md) is implemented with owner-only GET/PUT, complete payload validation and transactional relationship updates. All 71 PostgreSQL-backed tests pass (537 assertions). Stopped before Phase 2E; earlier checkpoint statements below are historical.
+
+Current checkpoint (2026-11-15): [Phase 2C academic database](docs/architecture/phase-2c-status.md) is implemented and migrated on local PostgreSQL after user authorization. All 50 PostgreSQL-backed backend tests pass. [Phase 2B.1](docs/testing/phase-2b1-auth-e2e.md) records manual authentication evidence. Stopped before Phase 2D; older checkpoint statements below are historical.
+
+Current work: [Phase 2A Supabase configuration](docs/architecture/phase-2a-status.md).
+Latest checkpoint: [Phase 2B Laravel authentication](docs/architecture/phase-2b-status.md) is implemented following owner confirmation of development-only project use. Protected `/api/v1/me` and local UUID provisioning are available; real login remains unverified. Stopped before Phase 2C. Earlier Phase 2A statements below are historical.
+The user has demonstrated emulator startup and authorized 2A. Historical Phase 1
+status below is retained; no hosted CI result is claimed. Supabase SDK setup is
+implemented; development-project confirmation and real auth validation
+remain pending. No Phase 2B–2F implementation is included.
+
 Re helps university students find academic study partners and competition teammates. MBTI is display-only and must never affect matching.
 
-**Phase 1 is incomplete and blocked on toolchains.** This checkout contains the monorepo layout, infrastructure, setup scripts, and authored scaffold overlays. Flutter and Laravel have NOT been generated, installed, built, or started. See [validation](docs/testing/phase-1-validation.md) and [checklist](task-checklist.md).
+**Phase 1 is partially validated.** Real Flutter 3.50.0 and Laravel 12.72.0 projects exist. Flutter analysis/widget tests and Android debug APK build, Laravel tests, both HTTP health routes and live PostgreSQL/Redis connections pass. Emulator startup and hosted CI evidence remain open. See [validation](docs/testing/phase-1-validation.md), [checklist](task-checklist.md) and the approval-gated [Phase 2 proposal](docs/architecture/phase-2-plan.md).
 
 ## Structure
 
@@ -26,7 +37,7 @@ The original sibling architecture kit is untouched. Its documentation is copied 
 ## Prerequisites
 
 - Flutter stable and its bundled Dart; Android Studio, Android SDK, accepted SDK licenses, and an Android emulator.
-- PHP 8.3 or 8.4 recommended (Laravel 12 minimum 8.2); Composer 2. Enable Laravel-required extensions plus `pdo_pgsql`, `pdo_sqlite` for framework test defaults, and `redis` (PhpRedis).
+- PHP 8.5.12 and Composer 2.11.2 were validated locally (Laravel 12 minimum PHP 8.2). Enable Laravel-required extensions plus `pdo_pgsql` and `pdo_sqlite`; Redis uses the Composer-installed Predis client, with no PhpRedis extension required.
 - Docker Desktop using Linux containers, Docker Compose v2 or later, Git.
 - Network access to official Flutter, Composer/Packagist, pub.dev, and container registries for initial downloads.
 
@@ -72,12 +83,12 @@ cd apps/mobile
 flutter build apk --debug
 ```
 
-Checks include `docker compose config --quiet`, `php artisan route:list`, Pint, `php artisan test`, `flutter doctor`, Dart formatting, `flutter analyze`, and `flutter test`. Test results must be recorded in [validation](docs/testing/phase-1-validation.md). CI setup remains pending real scaffolds and lockfiles; do not report these scripts as executed CI.
+Checks include `docker compose config --quiet`, `php artisan route:list`, Pint, `php artisan test`, `flutter doctor`, Dart formatting, `flutter analyze`, and `flutter test`. Run `scripts/check.ps1 -Target connections` separately against running local services for actual PostgreSQL/Redis connectivity. Test results are recorded in [validation](docs/testing/phase-1-validation.md). The [CI workflow](.github/workflows/foundation.yml) is configured but has not been observed running remotely.
 
 ## Environment and ownership
 
-Laravel owns domain rules and future `public` schema migrations. Flutter owns presentation and client sessions; Supabase owns Auth/Postgres/Realtime/Storage; Firebase delivers push; Redis provides server cache/queues. Local PostgreSQL is only a development database, not Supabase Auth/Realtime/Storage.
+Laravel owns domain rules and future application migrations in local Docker PostgreSQL. Flutter owns presentation and client sessions; Supabase Cloud Auth is the only identity provider; local Redis provides cache/queues. Do not migrate domain data to Supabase Cloud. Supabase UUID is the canonical user identifier. See [approved Phase 2A decisions](docs/architecture/phase-2a-decisions.md). Realtime, Storage and Firebase integrations remain future scope.
 
-No cloud credentials are required for the shell or liveness route. Later integration needs a dedicated development Supabase project (URL, public key, issuer/JWKS, least-privileged SSL database connection, server-only secret) and Firebase project/platform configuration. Only public Supabase values may enter Flutter compile-time config. Never include APP_KEY, database passwords, service-role keys, or Google service-account credentials in Flutter.
+No cloud credentials are required for the shell or liveness route. Auth integration needs a confirmed development Supabase project, URL/public key and issuer/JWKS/audience configuration. JWKS verification requires neither a cloud database connection nor a server secret. Only public Supabase values may enter Flutter compile-time config. Never include APP_KEY, database passwords, service-role keys, or Google service-account credentials in Flutter.
 
-No cloud resources, production changes, paid services, or Git commits were created. Review and commit a checkpoint after required application validation passes. Continue with identity only after Phase 1 is validated.
+This review created no cloud resources, production changes, paid services or Git commits. Existing commits predate the review. Review and commit this checkpoint after required application validation passes. Continue with identity only after Phase 1 is validated and the user approves the Phase 2 plan.

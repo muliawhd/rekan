@@ -1,0 +1,75 @@
+name: Foundation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: rekan_test
+          POSTGRES_USER: rekan_test
+          POSTGRES_PASSWORD: ci-only-password
+        ports: ['5432:5432']
+        options: --health-cmd="pg_isready -U rekan_test -d rekan_test" --health-interval=5s --health-timeout=3s --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: --health-cmd="redis-cli ping" --health-interval=5s --health-timeout=3s --health-retries=10
+    defaults:
+      run:
+        working-directory: services/api
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: rekan_test
+      DB_USERNAME: rekan_test
+      DB_PASSWORD: ci-only-password
+      REDIS_CLIENT: predis
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: pdo_pgsql, pdo_sqlite, mbstring, xml, curl, zip
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer validate --strict
+      - run: php vendor/bin/pint --test
+      - run: php artisan test
+      - run: php artisan foundation:check
+      - name: HTTP liveness
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > /tmp/re-api.log 2>&1 &
+          trap 'kill $!' EXIT
+          for path in /api/health /api/v1/health; do
+            curl --retry 10 --retry-connrefused --retry-delay 1 --fail --silent "http://127.0.0.1:8000$path" | jq -e '. == {"status":"ok"}'
+          done
+  mobile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.50.0'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build apk --debug

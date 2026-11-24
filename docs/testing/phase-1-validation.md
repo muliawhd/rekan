@@ -1,6 +1,39 @@
 # Phase 1 validation — 2026-11-13
 
-**Status: incomplete; do not start Phase 2.** No application build or integration success is claimed.
+## Current review (supersedes the historical bootstrap report below)
+
+**Status: partially validated; do not start Phase 2.** The placeholder is an intentional shell, not evidence of fullstack completion. No authentication or domain schema has been implemented.
+
+| Check | Verified result |
+| --- | --- |
+| Real project structure | Flutter main -> ReApp -> FoundationPage, feature/theme/public config folders, widget test and Android project exist. Laravel bootstrap, versioned API routes, controller, tests, vendor and lockfile exist. Native Android root is preserved separately. |
+| Versions | Flutter 3.50.0 stable, Dart 3.14.0; PHP 8.5.12, Composer 2.11.2; Laravel 12.72.0; Predis 3.7.1. |
+| Flutter analysis and tests | Final source: `flutter analyze` reports no issues; `flutter test` passes 1 widget test; Dart format check passes, 6 files unchanged. Uses extracted material_ui package required by Flutter 3.50; removed unnecessary dynamic theme cast. |
+| Android doctor | Missing Android command-line tools and unknown SDK license status. Windows/Chrome doctor warnings are outside this Android-only target. |
+| Android build / startup | `flutter build apk --debug` succeeded after installing NDK 28.2.13676358, Android platform 36 and CMake 3.22.1 using existing accepted licenses. APK generated under apps/mobile/build/app/outputs/flutter-apk. Flutter emulator launch yielded no connected Android device. A diagnostic headless launch of Medium_Phone_API_37.0 remained `emulator-5554 offline` after several minutes despite an active QEMU/WHPX process. APK installation/activity launch could not be verified. |
+| Laravel boot | `php artisan about` boots Laravel; route list contains only GET/HEAD api/health and api/v1/health after disabling unused storage serving. |
+| Real HTTP | Both URLs at 127.0.0.1:8000 return HTTP 200 and exact JSON `{"status":"ok"}` using `scripts/dev.ps1 -Target smoke`. Liveness is intentionally independent of dependency health. |
+| Laravel tests | Final suite: 5 passed, 16 assertions. Includes both health paths, successful dependency checks, and nonzero/redacted connection failure. |
+| PHP quality/dependencies | Pint passed; composer validate --strict and check-platform-reqs passed. PHP 8.5 PDO constant deprecations fixed. |
+| PostgreSQL / Redis containers | Compose config passes; postgres:17-alpine and redis:7-alpine pulled and started healthy via `up -d --wait`. Bound to 127.0.0.1:5433 and :6380, persistent named volumes. |
+| Laravel actual connections | `php artisan foundation:check`: PostgreSQL SELECT 1 passed; default and cache Redis connections both PING passed. This verifies application credentials/ports/drivers, not just container health. |
+| Configuration fixes | Enabled existing pdo_pgsql and pdo_sqlite in local PHP ini; installed/locked Predis and switched local/example Redis settings. DB_SSLMODE now reads the environment. Local DB uses prefer; hosted setup must require SSL. |
+| CI | Workflow added with Flutter 3.50.0, PHP 8.5, formatter/tests, service connections and HTTP smoke. No Git remote configured, so hosted execution cannot be verified from this checkout. |
+| Checkpoint | Existing commits predate this review. Review changes remain uncommitted; Phase 1 final checkbox stays open. |
+
+### Remaining acceptance gates
+
+1. Diagnose the AVD staying offline (or use a working Android device), then install and launch the built app. Resolve command-line tools/license-status doctor warnings without assuming new license acceptance.
+2. Observe the hosted CI workflow and review/commit the foundation checkpoint.
+3. Only then mark Phase 1 validated and obtain explicit approval for the [Phase 2 plan](../architecture/phase-2-plan.md).
+
+No Supabase Auth, hosted database, Realtime, Storage or FCM integration was tested; those are not implied by local Postgres success. No application migrations or database data writes were required by this review. Rollback source changes via normal review/revert; stop local containers with `scripts/dev.ps1 -Target infra-down` (preserves volumes). PHP extension enabling is a machine prerequisite change outside Git. The local API and Docker services were started for validation.
+
+Sandbox denied Docker/SDK/cache/Composer access; required operations were rerun with approval. Composer's first elevated download timed out; forcing IPv4 succeeded. Final API tests had no prior cache-permission warning. Editor diagnostics concern historical Dart overlays outside a Flutter package; runnable mobile source is validated by Flutter analysis. The final ADB installation/launch attempt exited 1 with `closed` / `device offline`; startup was not passed. The diagnostic emulator was stopped after this failure.
+
+## Historical bootstrap report (before toolchains/projects were installed)
+
+The following records the earlier implementation state, not the current review result.
 
 | Check | Observed result |
 | --- | --- |

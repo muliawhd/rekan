@@ -1,5 +1,9 @@
 # Domain data model v1
 
+Phase 2D update: all eight Phase 2C tables now have Eloquent models and relationships, including composite-key Pivot models. No schema changes were made. Global null-university courses remain a curated shared catalog; independent universities can reuse the same course code. A future unknown-origin catalog should introduce an explicit source/scope model before changing global uniqueness. See [Phase 2D audit](phase-2d-status.md).
+
+Phase 2C update (2026-11-15): the identity and academic subset is implemented in local PostgreSQL. See [Phase 2C status](phase-2c-status.md) for exact lengths, ranges, defaults, deletion rules and validation. Remaining tables below are proposals. Profile visibility defaults to private; semesters are nullable or 1–20, skill levels 1–5, and MBTI is optional display-only. Courses have a partial unique index for global codes; course codes are uppercase/trimmed and skill names lowercase/trimmed. Existing users retain their Supabase UUID and gain nullable display_name/university_id.
+
 **Authority**: Laravel migrations for application `public` tables. Supabase `auth.users` managed by Supabase. Application `users.id` is UUID linked in service logic to `auth.users.id` (avoid coupling all local tests to Supabase-managed schema). All timestamps UTC; user UI in Asia/Jakarta or user-selected zone.
 
 | Table | Key columns / constraints | Notes |
@@ -12,6 +16,7 @@
 | skills | id, normalized_name unique | canonical skill taxonomy |
 | user_skills | user_id, skill_id, level, PK(user_id,skill_id) | validation bounds |
 | user_courses | user_id, course_id, PK(user_id,course_id) | enrolled/interested distinction later |
+| academic_preferences | user_id PK/FK, study_mode nullable online/in_person/hybrid, preferred_language nullable | minimal Phase 2C assumption; no preference implied by null |
 | intents | id, user_id, type study/competition, course_id nullable, goal, active | intent-based search |
 | availability_slots | id, user_id, weekday, start_minute, end_minute, timezone | reject overlaps/invalid range |
 | competition_roles | id, slug unique, name | roles sought/held |

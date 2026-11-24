@@ -1,0 +1,565 @@
+{
+  "error": false,
+  "meta": {
+    "variableCollections": {
+      "VariableCollectionId:1": {
+        "defaultModeId": "VariableCollectionId:1/mode1",
+        "hiddenFromPublishing": false,
+        "id": "VariableCollectionId:1",
+        "key": "VariableCollectionId:1",
+        "modes": [
+          {
+            "modeId": "VariableCollectionId:1/mode1",
+            "name": "Light (Paper)"
+          }
+        ],
+        "name": "Re:kan Colors",
+        "remote": false,
+        "variableIds": [
+          "VariableID:1",
+          "VariableID:2",
+          "VariableID:3",
+          "VariableID:4",
+          "VariableID:5",
+          "VariableID:6",
+          "VariableID:7",
+          "VariableID:8",
+          "VariableID:9",
+          "VariableID:10",
+          "VariableID:11"
+        ]
+      },
+      "VariableCollectionId:2": {
+        "defaultModeId": "VariableCollectionId:2/mode1",
+        "hiddenFromPublishing": false,
+        "id": "VariableCollectionId:2",
+        "key": "VariableCollectionId:2",
+        "modes": [
+          {
+            "modeId": "VariableCollectionId:2/mode1",
+            "name": "Default"
+          }
+        ],
+        "name": "Re:kan Spacing & Layout",
+        "remote": false,
+        "variableIds": [
+          "VariableID:12",
+          "VariableID:13",
+          "VariableID:14",
+          "VariableID:15",
+          "VariableID:16",
+          "VariableID:17",
+          "VariableID:18",
+          "VariableID:19",
+          "VariableID:20",
+          "VariableID:21",
+          "VariableID:22",
+          "VariableID:23",
+          "VariableID:24",
+          "VariableID:25",
+          "VariableID:26"
+        ]
+      }
+    },
+    "variables": {
+      "VariableID:1": {
+        "codeSyntax": {},
+        "description": "Primary text, borders, icons",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:1",
+        "key": "VariableID:1",
+        "name": "color/ink",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.06666667014360428,
+            "g": 0.06666667014360428,
+            "r": 0.06666667014360428
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:10": {
+        "codeSyntax": {},
+        "description": "Destructive action, validation error",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:10",
+        "key": "VariableID:10",
+        "name": "color/danger",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.3019607961177826,
+            "g": 0.2823529541492462,
+            "r": 0.8980392217636108
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:11": {
+        "codeSyntax": {},
+        "description": "Warning banner and alert state",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:11",
+        "key": "VariableID:11",
+        "name": "color/warning",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.0,
+            "g": 0.6627451181411743,
+            "r": 0.9490196108818054
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:12": {
+        "codeSyntax": {},
+        "description": "Icon/text micro-gap",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:12",
+        "key": "VariableID:12",
+        "name": "space/4",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 4.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:13": {
+        "codeSyntax": {},
+        "description": "Tightly related items",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:13",
+        "key": "VariableID:13",
+        "name": "space/8",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 8.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:14": {
+        "codeSyntax": {},
+        "description": "Compact component padding",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:14",
+        "key": "VariableID:14",
+        "name": "space/12",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 12.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:15": {
+        "codeSyntax": {},
+        "description": "Normal component padding & screen gutter",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:15",
+        "key": "VariableID:15",
+        "name": "space/16",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 16.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:16": {
+        "codeSyntax": {},
+        "description": "Section separation",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:16",
+        "key": "VariableID:16",
+        "name": "space/24",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 24.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:17": {
+        "codeSyntax": {},
+        "description": "Major content separation",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:17",
+        "key": "VariableID:17",
+        "name": "space/32",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 32.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:18": {
+        "codeSyntax": {},
+        "description": "Hero/landing separation",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:18",
+        "key": "VariableID:18",
+        "name": "space/48",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 48.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:19": {
+        "codeSyntax": {},
+        "description": "Squared brutalist corners",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:19",
+        "key": "VariableID:19",
+        "name": "radius/none",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 0.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:2": {
+        "codeSyntax": {},
+        "description": "Main warm paper background",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:2",
+        "key": "VariableID:2",
+        "name": "color/paper",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.9607843160629272,
+            "g": 0.9921568632125854,
+            "r": 1.0
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:20": {
+        "codeSyntax": {},
+        "description": "Chips, badges, compact tags",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:20",
+        "key": "VariableID:20",
+        "name": "radius/small",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 6.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:21": {
+        "codeSyntax": {},
+        "description": "Buttons, text inputs, list tiles",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:21",
+        "key": "VariableID:21",
+        "name": "radius/medium",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 10.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:22": {
+        "codeSyntax": {},
+        "description": "Swipe cards, modals, containers",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:22",
+        "key": "VariableID:22",
+        "name": "radius/large",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 16.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:23": {
+        "codeSyntax": {},
+        "description": "Avatars, circular icon actions, status dots",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:23",
+        "key": "VariableID:23",
+        "name": "radius/full",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 999.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:24": {
+        "codeSyntax": {},
+        "description": "Standard neo-brutalist stroke weight (2px)",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:24",
+        "key": "VariableID:24",
+        "name": "border/standard",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 2.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:25": {
+        "codeSyntax": {},
+        "description": "Emphasized/hero stroke weight (3px)",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:25",
+        "key": "VariableID:25",
+        "name": "border/emphasized",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 3.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:26": {
+        "codeSyntax": {},
+        "description": "Minimum accessible tap target (44px)",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:26",
+        "key": "VariableID:26",
+        "name": "touch/minTarget",
+        "remote": false,
+        "resolvedType": "FLOAT",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:2/mode1": 44.0
+        },
+        "variableCollectionId": "VariableCollectionId:2"
+      },
+      "VariableID:3": {
+        "codeSyntax": {},
+        "description": "Cards, forms, primary surfaces",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:3",
+        "key": "VariableID:3",
+        "name": "color/surface",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 1.0,
+            "g": 1.0,
+            "r": 1.0
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:4": {
+        "codeSyntax": {},
+        "description": "Secondary sections, disabled fill",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:4",
+        "key": "VariableID:4",
+        "name": "color/mutedSurface",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.9098039269447327,
+            "g": 0.9411764740943909,
+            "r": 0.9490196108818054
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:5": {
+        "codeSyntax": {},
+        "description": "Secondary text, metadata, captions",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:5",
+        "key": "VariableID:5",
+        "name": "color/mutedText",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.3843137323856354,
+            "g": 0.3843137323856354,
+            "r": 0.3843137323856354
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:6": {
+        "codeSyntax": {},
+        "description": "Primary CTA, active nav, brand emphasis",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:6",
+        "key": "VariableID:6",
+        "name": "color/accentPrimary",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.0,
+            "g": 0.8980392217636108,
+            "r": 1.0
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:7": {
+        "codeSyntax": {},
+        "description": "Tags, availability, degree badge, secondary state",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:7",
+        "key": "VariableID:7",
+        "name": "color/accentTeal",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.7568627595901489,
+            "g": 0.7803921699523926,
+            "r": 0.08627451211214066
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:8": {
+        "codeSyntax": {},
+        "description": "Notification badges, unread counts, special state",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:8",
+        "key": "VariableID:8",
+        "name": "color/accentMagenta",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.7333333492279053,
+            "g": 0.1764705926179886,
+            "r": 0.9490196108818054
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      },
+      "VariableID:9": {
+        "codeSyntax": {},
+        "description": "Success, verified, available state",
+        "hiddenFromPublishing": false,
+        "id": "VariableID:9",
+        "key": "VariableID:9",
+        "name": "color/success",
+        "remote": false,
+        "resolvedType": "COLOR",
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "valuesByMode": {
+          "VariableCollectionId:1/mode1": {
+            "a": 1.0,
+            "b": 0.4156862795352936,
+            "g": 0.658823549747467,
+            "r": 0.12156862765550613
+          }
+        },
+        "variableCollectionId": "VariableCollectionId:1"
+      }
+    }
+  },
+  "status": 200
+}
