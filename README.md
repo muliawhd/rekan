@@ -1,4 +1,4 @@
-# Re — fullstack foundation
+# Re:kan — fullstack foundation
 
 Latest checkpoint (2026-11-15): [Phase 2D academic profile API](docs/architecture/phase-2d-status.md) is implemented with owner-only GET/PUT, complete payload validation and transactional relationship updates. All 71 PostgreSQL-backed tests pass (537 assertions). Stopped before Phase 2E; earlier checkpoint statements below are historical.
 
