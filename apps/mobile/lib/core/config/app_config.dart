@@ -1,9 +1,13 @@
-// Public compile-time configuration only; never load the backend environment.
+// Public compile-time configuration only; never embed secret/service-role keys.
 abstract final class AppConfig {
   static const apiBaseUrl = String.fromEnvironment('API_BASE_URL');
-  static const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+  static const supabaseUrl = String.fromEnvironment(
+    'SUPABASE_URL',
+    defaultValue: 'https://khvkbytzbzukogibifmi.supabase.co',
+  );
   static const supabasePublishableKey = String.fromEnvironment(
     'SUPABASE_PUBLISHABLE_KEY',
+    defaultValue: 'sb_publishable_Qhp4FlDdfq6n-M6Y0grYNw_eDzXjP7m',
   );
 
   static SupabaseConfiguration? get supabase =>

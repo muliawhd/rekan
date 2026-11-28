@@ -16,7 +16,10 @@ enum AuthScreen {
 }
 
 class AuthController extends ChangeNotifier {
-  AuthController(this.gateway) {
+  AuthController(
+    this.gateway, {
+    this.unauthenticatedLanding = AuthScreen.login,
+  }) {
     _events = gateway.changes.listen(
       (signal) {
         _revision++;
@@ -36,7 +39,9 @@ class AuthController extends ChangeNotifier {
     );
     unawaited(restore());
   }
+
   final AuthGateway gateway;
+  final AuthScreen unauthenticatedLanding;
   late final StreamSubscription<AuthSignal> _events;
   AuthScreen screen = AuthScreen.checking;
   String? message;
@@ -49,7 +54,7 @@ class AuthController extends ChangeNotifier {
     final revision = ++_revision;
     final owner = gateway.userId;
     message = null;
-    screen = owner == null ? AuthScreen.welcome : AuthScreen.checking;
+    screen = owner == null ? unauthenticatedLanding : AuthScreen.checking;
     if (!_disposed) notifyListeners();
     if (owner == null) return;
     try {
@@ -155,9 +160,9 @@ abstract final class AuthValidation {
       RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value?.trim() ?? '')
       ? null
       : 'Masukkan alamat email yang valid.';
+
   static String? password(String? value, {bool registration = false}) {
     if (value == null || value.isEmpty) return 'Masukkan kata sandi.';
-    // Local UX floor, not a claim about the configured server policy.
     if (registration && value.length < 8) return 'Gunakan minimal 8 karakter.';
     return null;
   }

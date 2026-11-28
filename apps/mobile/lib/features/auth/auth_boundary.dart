@@ -1,10 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../../core/theme/re_tokens.dart';
-import '../../core/widgets/re_form_components.dart';
+import '../../core/theme/rekan_theme.dart';
+import '../../core/widgets/rekan_logo.dart';
 import '../academic_profile/data/academic_profile_repository.dart';
 import '../academic_profile/domain/academic_onboarding_completion.dart';
 import '../academic_profile/presentation/academic_onboarding_page.dart';
+import '../rekan/data/supabase_rekan_repository.dart';
+import '../rekan/presentation/rekan_workspace_shell.dart';
 import 'auth_controller.dart';
 import 'auth_form.dart';
 import 'auth_gateway.dart';
@@ -13,12 +15,16 @@ class AuthBoundary extends StatefulWidget {
   const AuthBoundary({
     super.key,
     this.gateway,
+    this.rekanRepository,
     this.profileRepository,
     this.catalog,
   });
+
   final AuthGateway? gateway;
+  final RekanRepository? rekanRepository;
   final AcademicProfileRepository? profileRepository;
   final AcademicCatalogSnapshot? catalog;
+
   @override
   State<AuthBoundary> createState() => _AuthBoundaryState();
 }
@@ -26,11 +32,17 @@ class AuthBoundary extends StatefulWidget {
 class _AuthBoundaryState extends State<AuthBoundary>
     with WidgetsBindingObserver {
   AuthController? _controller;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (widget.gateway != null) _controller = AuthController(widget.gateway!);
+    if (widget.gateway != null) {
+      _controller = AuthController(
+        widget.gateway!,
+        unauthenticatedLanding: AuthScreen.login,
+      );
+    }
   }
 
   @override
@@ -55,215 +67,94 @@ class _AuthBoundaryState extends State<AuthBoundary>
   @override
   Widget build(BuildContext context) {
     final controller = _controller;
-    if (controller == null) return const WelcomePage();
+    if (controller == null) {
+      return const _UnconfiguredNoticeScreen();
+    }
+
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
         final screen = controller.screen;
-        // A single replaced page prevents back navigation into prior accounts.
         return PopScope(
-          canPop:
+          canPop: screen == AuthScreen.login ||
               screen == AuthScreen.welcome ||
               screen == AuthScreen.authenticated,
           onPopInvokedWithResult: (didPop, _) {
-            if (!didPop && !controller.busy) controller.go(AuthScreen.welcome);
+            if (!didPop && !controller.busy) {
+              controller.go(AuthScreen.login);
+            }
           },
           child: switch (screen) {
-            AuthScreen.welcome => WelcomePage(controller: controller),
-            AuthScreen.login || AuthScreen.register => AuthForm(
-              key: ValueKey('${screen.name}:${controller.revision}'),
+            AuthScreen.welcome || AuthScreen.login => AuthForm(
+              key: ValueKey('login:${controller.revision}'),
               controller: controller,
-              registration: screen == AuthScreen.register,
+              registration: false,
             ),
-            AuthScreen.checking => const RePageScaffold(
-              children: [
-                ReBrandMark(variant: ReBrandMarkVariant.surface),
-                SizedBox(height: ReTokens.spaceLg),
-                ReFormHeading(
-                  eyebrow: 'MEMERIKSA SESI',
-                  title: 'Menyiapkan ruangmu',
-                  description: 'Memeriksa sesi dengan aman.',
-                ),
-                LinearProgressIndicator(
-                  semanticsLabel: 'Memeriksa sesi',
-                  color: ReTokens.ink,
-                  backgroundColor: ReTokens.primaryYellow,
-                  minHeight: 8,
-                ),
-              ],
+            AuthScreen.register => AuthForm(
+              key: ValueKey('register:${controller.revision}'),
+              controller: controller,
+              registration: true,
             ),
-            AuthScreen.authenticated =>
-              widget.profileRepository != null &&
-                      controller.gateway.userId != null
-                  ? AcademicOnboardingBoundary(
-                      key: ValueKey(controller.gateway.userId),
-                      userId: controller.gateway.userId!,
-                      repository: widget.profileRepository!,
-                      authController: controller,
-                      catalog: widget.catalog,
-                    )
-                  : RePageScaffold(
-                      key: ValueKey(controller.gateway.userId),
-                      children: [
-                        const Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: ReTokens.spaceSm,
-                          runSpacing: ReTokens.spaceSm,
-                          children: [
-                            ReBrandMark(variant: ReBrandMarkVariant.surface),
-                            ReChip(
-                              label: 'SESI AKTIF',
-                              variant: ReChipVariant.availability,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: ReTokens.spaceLg),
-                        const ReFormHeading(
-                          eyebrow: 'TERVERIFIKASI',
-                          title: 'Ruang akademikmu',
-                          description: 'Kamu sudah masuk ke Re:kan. Fitur profil akademik sedang disiapkan.',
-                        ),
-                        const ReStatusBanner(
-                          variant: ReStatusVariant.success,
-                          title: 'SIAP',
-                          message: 'Belum ada tindakan yang perlu kamu lakukan di sini.',
-                        ),
-                        const SizedBox(height: ReTokens.spaceLg),
-                        ReSecondaryButton.destructive(
-                          label: 'Keluar',
-                          icon: Icons.logout,
-                          onPressed: controller.busy ? null : controller.logout,
-                        ),
-                      ],
-                    ),
-            AuthScreen.verification => RePageScaffold(
-              padding: const EdgeInsets.symmetric(
-                horizontal: ReTokens.spaceLg,
-                vertical: ReTokens.spaceSm,
-              ),
-              children: [
-                const Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: ReTokens.spaceSm,
-                  runSpacing: ReTokens.spaceXs,
-                  children: [
-                    ReBrandMark(
-                      variant: ReBrandMarkVariant.surface,
-                      size: ReBrandMarkSize.sm,
-                    ),
-                    ReChip(
-                      label: 'VERIFIKASI EMAIL',
-                      variant: ReChipVariant.status,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: ReTokens.spaceSm),
-                const ReFormHeading(
-                  title: 'Periksa emailmu',
-                  description: 'Jika pendaftaran diterima, ikuti petunjuk konfirmasi di email. Periksa juga folder spam.',
-                ),
-                Container(
-                  padding: const EdgeInsets.all(ReTokens.spaceCompact),
-                  decoration: BoxDecoration(
-                    color: ReTokens.surface,
-                    borderRadius: BorderRadius.circular(ReTokens.radiusLarge),
-                    border: ReTokens.emphasizedBorder,
-                    boxShadow: ReTokens.shadowHard,
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ReSectionHeader(
-                        title: 'Langkah Konfirmasi Akun',
-                        subtitle: '1. Buka kotak masuk atau folder spam emailmu.\n2. Klik tautan konfirmasi pendaftaran.\n3. Kembali ke Re:kan lalu masuk.',
+            AuthScreen.checking => const _SessionCheckingScreen(),
+            AuthScreen.authenticated => widget.rekanRepository != null
+                ? RekanWorkspaceShell(
+                    key: ValueKey(controller.gateway.userId),
+                    authController: controller,
+                    repository: widget.rekanRepository!,
+                  )
+                : (widget.profileRepository != null &&
+                        controller.gateway.userId != null)
+                    ? AcademicOnboardingBoundary(
+                        key: ValueKey(controller.gateway.userId),
+                        userId: controller.gateway.userId!,
+                        repository: widget.profileRepository!,
+                        authController: controller,
+                        catalog: widget.catalog,
+                      )
+                    : _InfoStateScreen(
+                        badge: 'SESI AKTIF',
+                        title: 'Terhubung ke Re:kan',
+                        description:
+                            'Akun terverifikasi. Repository Supabase belum terhubung pada konteks pengujian ini.',
+                        primaryLabel: 'Keluar dari Akun',
+                        onPrimary: controller.busy ? null : controller.logout,
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: ReTokens.spaceSm),
-                const ReStatusBanner(
-                  variant: ReStatusVariant.info,
-                  title: 'INFO',
-                  message: 'Setelah konfirmasi, kembali ke Re:kan dan masuk. Tautan kembali otomatis ke aplikasi belum tersedia.',
-                ),
-                const SizedBox(height: ReTokens.spaceCompact),
-                RePrimaryButton(
-                  label: 'Kembali ke masuk',
-                  onPressed: () => controller.go(AuthScreen.login),
-                ),
-              ],
+            AuthScreen.verification => _InfoStateScreen(
+              badge: 'VERIFIKASI EMAIL',
+              title: 'Periksa Emailmu',
+              description:
+                  'Kami telah mengirim tautan konfirmasi pendaftaran ke emailmu. Cek kotak masuk atau folder spam, lalu kembali masuk ke Re:kan.',
+              primaryLabel: 'Kembali ke Masuk',
+              onPrimary: () => controller.go(AuthScreen.login),
             ),
-            AuthScreen.recovery => RePageScaffold(
-              children: [
-                const Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: ReTokens.spaceSm,
-                  runSpacing: ReTokens.spaceSm,
-                  children: [
-                    ReBrandMark(variant: ReBrandMarkVariant.surface),
-                    ReChip(
-                      label: 'PEMULIHAN AKUN',
-                      variant: ReChipVariant.neutral,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: ReTokens.spaceMd),
-                const ReFormHeading(
-                  title: 'Pulihkan akses akun',
-                  description:
-                      'Pemulihan kata sandi belum tersedia di versi ini.',
-                ),
-                const ReStatusBanner(
-                  variant: ReStatusVariant.warning,
-                  title: 'BELUM TERSEDIA',
-                  message: 'Tautan pemulihan belum dikonfigurasi. Tidak ada email pemulihan yang dikirim. Hubungi pengelola Re:kan untuk bantuan.',
-                ),
-                const SizedBox(height: ReTokens.spaceLg),
-                RePrimaryButton(
-                  label: controller.gateway.userId == null
-                      ? 'Kembali ke masuk'
-                      : 'Keluar dari sesi pemulihan',
-                  onPressed: controller.busy
-                      ? null
-                      : () {
-                          if (controller.gateway.userId == null) {
-                            controller.go(AuthScreen.login);
-                          } else {
-                            controller.logout();
-                          }
-                        },
-                ),
-              ],
+            AuthScreen.recovery => _InfoStateScreen(
+              badge: 'PEMULIHAN AKUN',
+              title: 'Pulihkan Akses Akun',
+              description:
+                  'Pemulihan kata sandi otomatis belum dikonfigurasi pada versi ini. Tidak ada email pemulihan yang dikirim. Hubungi pengelola Re:kan untuk bantuan.',
+              primaryLabel: controller.gateway.userId == null
+                  ? 'Kembali ke Masuk'
+                  : 'Keluar dari Sesi Pemulihan',
+              onPrimary: controller.busy
+                  ? null
+                  : () {
+                      if (controller.gateway.userId == null) {
+                        controller.go(AuthScreen.login);
+                      } else {
+                        controller.logout();
+                      }
+                    },
             ),
-            AuthScreen.sessionError => RePageScaffold(
-              children: [
-                const ReBrandMark(variant: ReBrandMarkVariant.surface),
-                const SizedBox(height: ReTokens.spaceLg),
-                const ReFormHeading(
-                  eyebrow: 'SESI TERKUNCI',
-                  title: 'Periksa koneksi dan sesi',
-                  description: 'Ruang akun Re:kan belum dapat dibuka.',
-                ),
-                ReStatusBanner(
-                  variant: ReStatusVariant.error,
-                  title: 'GALAT SESI',
-                  message: controller.message ?? 'Coba lagi sebentar.',
-                ),
-                const SizedBox(height: ReTokens.spaceLg),
-                RePrimaryButton(
-                  label: 'Coba lagi',
-                  busy: controller.busy,
-                  onPressed: controller.restore,
-                ),
-                const SizedBox(height: ReTokens.spaceSm),
-                ReSecondaryButton(
-                  label: 'Keluar dan masuk ulang',
-                  onPressed: controller.busy ? null : controller.logout,
-                ),
-              ],
+            AuthScreen.sessionError => _InfoStateScreen(
+              badge: 'GALAT SESI',
+              title: 'Periksa Koneksi & Sesi',
+              description:
+                  controller.message ?? 'Ruang akun Re:kan belum dapat dibuka.',
+              primaryLabel: 'Coba Lagi',
+              onPrimary: controller.busy ? null : controller.restore,
+              secondaryLabel: 'Keluar dan Masuk Ulang',
+              onSecondary: controller.busy ? null : controller.logout,
+              isError: true,
             ),
           },
         );
@@ -272,205 +163,168 @@ class _AuthBoundaryState extends State<AuthBoundary>
   }
 }
 
-/// Screen 1 — Welcome / Landing (`FigCraft id: 434`).
-///
-/// Implements the approved Neo-Brutalist academic landing screen with
-/// `ReBrandMark` (`Re:kan`), `MAHASISWA` badge, academic collaboration preview
-/// card (`Study Group & UTS`, `Tim Lomba & Riset`, student cards `NR` & `DP`),
-/// and primary/secondary CTAs.
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key, this.controller});
-  final AuthController? controller;
-
-  @override
-  Widget build(BuildContext context) => RePageScaffold(
-    padding: const EdgeInsets.symmetric(
-      horizontal: ReTokens.spaceLg,
-      vertical: ReTokens.spaceSm,
-    ),
-    children: [
-      const Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: ReTokens.spaceSm,
-        runSpacing: ReTokens.spaceXs,
-        children: [
-          ReBrandMark(
-            variant: ReBrandMarkVariant.surface,
-            size: ReBrandMarkSize.sm,
-          ),
-          ReChip(label: 'MAHASISWA', variant: ReChipVariant.status),
-        ],
-      ),
-      const SizedBox(height: 6),
-      const ReFormHeading(
-        title: 'Temukan partner belajar dan rekan kompetisi',
-        description: 'Kolaborasi belajar, riset, dan kompetisi lintas jurusan.',
-      ),
-      const _AcademicCollaborationHeroCard(),
-      const SizedBox(height: 8),
-      if (controller == null) ...[
-        const ReStatusBanner(
-          variant: ReStatusVariant.error,
-          title: 'KONFIGURASI',
-          message:
-              'Layanan akun belum dikonfigurasi. Hubungi pengelola Re:kan.',
-        ),
-        const SizedBox(height: 6),
-      ],
-      RePrimaryButton(
-        label: 'Daftar',
-        onPressed: controller == null
-            ? null
-            : () => controller!.go(AuthScreen.register),
-      ),
-      const SizedBox(height: 6),
-      ReSecondaryButton(
-        label: 'Sudah punya akun? Masuk',
-        onPressed: controller == null
-            ? null
-            : () => controller!.go(AuthScreen.login),
-      ),
-    ],
-  );
-}
-
-class _AcademicCollaborationHeroCard extends StatelessWidget {
-  const _AcademicCollaborationHeroCard();
+class _SessionCheckingScreen extends StatelessWidget {
+  const _SessionCheckingScreen();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(ReTokens.spaceSm),
-      decoration: BoxDecoration(
-        color: ReTokens.surface,
-        borderRadius: BorderRadius.circular(ReTokens.radiusLarge),
-        border: ReTokens.emphasizedBorder,
-        boxShadow: ReTokens.shadowHero,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Wrap(
-            spacing: ReTokens.spaceSm,
-            runSpacing: ReTokens.spaceXs,
+    return Scaffold(
+      backgroundColor: RekanPalette.surface,
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              ReChip(
-                label: 'STUDY GROUP & UTS',
-                variant: ReChipVariant.selected,
+              RekanLogo(size: 68, showWordmark: true),
+              SizedBox(height: 22),
+              SizedBox(
+                width: 170,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(999)),
+                  child: LinearProgressIndicator(
+                    minHeight: 5,
+                    color: RekanPalette.lemonVivid,
+                    backgroundColor: RekanPalette.lemonSoft,
+                  ),
+                ),
               ),
-              ReChip(label: 'TIM LOMBA & RISET', variant: ReChipVariant.status),
+              SizedBox(height: 12),
+              Text(
+                'Memeriksa sesi akun...',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: RekanPalette.muted,
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: ReTokens.primaryYellow,
-              borderRadius: BorderRadius.circular(ReTokens.radiusMedium),
-              border: ReTokens.standardBorder,
-            ),
-            child: const Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: [
-                _StudentPreviewMiniCard(
-                  initials: 'NR',
-                  avatarColor: ReTokens.mutedSurface,
-                  focus: 'Data Science',
-                  program: 'Ilmu Komputer',
-                ),
-                _StudentPreviewMiniCard(
-                  initials: 'DP',
-                  avatarColor: ReTokens.accentTeal,
-                  focus: 'UI/UX & Riset',
-                  program: 'Sistem Informasi',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: ReTokens.spaceSm,
-              vertical: 4,
-            ),
-            decoration: BoxDecoration(
-              color: ReTokens.mutedSurface,
-              borderRadius: BorderRadius.circular(ReTokens.radiusSmall),
-              border: ReTokens.standardBorder,
-            ),
-            child: Text(
-              'KOLABORASI LINTAS JURUSAN & KAMPUS',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelMedium
-                  ?.copyWith(color: ReTokens.ink, fontWeight: FontWeight.w800),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _StudentPreviewMiniCard extends StatelessWidget {
-  const _StudentPreviewMiniCard({
-    required this.initials,
-    required this.avatarColor,
-    required this.focus,
-    required this.program,
-  });
-
-  final String initials;
-  final Color avatarColor;
-  final String focus;
-  final String program;
+class _UnconfiguredNoticeScreen extends StatelessWidget {
+  const _UnconfiguredNoticeScreen();
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 110, maxWidth: 160),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        decoration: BoxDecoration(
-          color: ReTokens.surface,
-          borderRadius: BorderRadius.circular(ReTokens.radiusSmall),
-          border: ReTokens.standardBorder,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ExcludeSemantics(
-              child: Container(
-                width: 24,
-                height: 24,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: avatarColor,
-                  shape: BoxShape.circle,
-                  border: ReTokens.standardBorder,
-                ),
-                child: Text(
-                  initials,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: ReTokens.ink,
-                    fontWeight: FontWeight.w800,
+    return const _InfoStateScreen(
+      badge: 'KONFIGURASI',
+      title: 'Layanan Akun Belum Siap',
+      description:
+          'Layanan akun belum dikonfigurasi. Tutup dan buka kembali Re:kan.',
+      isError: true,
+    );
+  }
+}
+
+class _InfoStateScreen extends StatelessWidget {
+  const _InfoStateScreen({
+    required this.badge,
+    required this.title,
+    required this.description,
+    this.primaryLabel,
+    this.onPrimary,
+    this.secondaryLabel,
+    this.onSecondary,
+    this.isError = false,
+  });
+
+  final String badge;
+  final String title;
+  final String description;
+  final String? primaryLabel;
+  final VoidCallback? onPrimary;
+  final String? secondaryLabel;
+  final VoidCallback? onSecondary;
+  final bool isError;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: RekanPalette.surface,
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: RekanLogo.header(),
                   ),
-                ),
+                  const SizedBox(height: 28),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isError
+                            ? RekanPalette.dangerSoft
+                            : RekanPalette.lemonTint,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: isError
+                              ? const Color(0xFFFECACA)
+                              : RekanPalette.lemonSoft,
+                        ),
+                      ),
+                      child: Text(
+                        badge,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: isError
+                              ? RekanPalette.danger
+                              : RekanPalette.lemonDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w900,
+                      color: RekanPalette.ink,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: RekanPalette.inkSecondary,
+                    ),
+                  ),
+                  if (primaryLabel != null) ...[
+                    const SizedBox(height: 24),
+                    FilledButton(
+                      onPressed: onPrimary,
+                      child: Text(primaryLabel!),
+                    ),
+                  ],
+                  if (secondaryLabel != null) ...[
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: onSecondary,
+                      child: Text(secondaryLabel!),
+                    ),
+                  ],
+                ],
               ),
             ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                '$focus · $program',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: ReTokens.ink,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

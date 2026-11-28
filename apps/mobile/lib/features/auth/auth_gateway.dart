@@ -49,6 +49,22 @@ class SupabaseAuthGateway implements AuthGateway {
 }
 
 String safeAuthMessage(Object error) {
+  if (error is PostgrestException) {
+    final msg = error.message;
+    if (msg.contains('EMAIL_EXISTS')) {
+      return 'Email ini sudah terdaftar. Silakan masuk dengan akun tersebut.';
+    }
+    if (msg.contains('INVALID_CREDENTIALS')) {
+      return 'Email atau kata sandi salah. Periksa kembali lalu coba lagi.';
+    }
+    if (msg.contains('INVALID_EMAIL')) {
+      return 'Format email tidak valid.';
+    }
+    if (msg.contains('WEAK_PASSWORD')) {
+      return 'Kata sandi terlalu pendek. Gunakan minimal 6 karakter.';
+    }
+    return 'Gagal memproses akun di server. Coba lagi sebentar.';
+  }
   if (error is AuthException) {
     return switch (error.code) {
       'email_not_confirmed' =>
